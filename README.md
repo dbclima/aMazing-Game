@@ -1,2 +1,2 @@
 # aMazing-Game
-Jogo de labirinto muito brabo (Por João Binda)
+Jogo de labirinto muito brabo
