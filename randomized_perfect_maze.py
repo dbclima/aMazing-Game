@@ -53,13 +53,43 @@ plt.show()
 
 
 
-### Definindo os custos de cada aresta para o jogo
+### Definindo os vértices de início e fim do labirinto, ou seja, os mais distantes entre si
+center_node = list(T.nodes())[0]
+distances = nx.single_source_shortest_path_length(T, center_node)
+print(distances)
 
+start_node = max(distances, key=distances.get)
+print(max(distances, key=distances.get), distances[start_node])
+
+distances = nx.single_source_shortest_path_length(T, start_node)
+print(distances)
+end_node = max(distances, key=distances.get)
+print(max(distances, key=distances.get), distances[end_node])
+
+# Assign 'color' attribute to specific nodes
+T.nodes[start_node]['color'] = 'yellow'
+T.nodes[end_node]['color'] = 'lightgreen'
+
+# Create a list of colors for all nodes, defaulting to a color if not specified
+node_colors = [T.nodes[node].get('color', 'skyblue') for node in T.nodes()]
+
+plt.figure(figsize=(5, 5))
+plt.title(f"Maze with start and end nodes defined\nStart: {start_node}, End: {end_node}")
+nx.draw(T, pos_grid, with_labels=True, node_color=node_colors, node_size=500, edge_color='black', font_size=9)
+
+plt.show()
+
+
+
+### Definindo os custos de cada aresta para o jogo
 maze = T.copy()
 
-start, end = (0,0), (n-1,m-1)
-# talvez seja mais interessante se o start e end nodes sejam os nós folha 
+# start, end = (0,0), (n-1,m-1)
+# talvez seja mais interessante se o start e end nodes sejam os nós folha
 # mais distantes entre si, o que pode ser descoberto fazendo BFS
+
+start, end = start_node, end_node
+# start e end nodes definidos como os mais distantes entre si no labirinto
 
 V = list(maze.nodes())
 E = list(maze.edges())
@@ -74,9 +104,9 @@ print(checkpoint_nodes)
 
 for u, v in maze.edges():
   if(v in checkpoint_nodes or u in checkpoint_nodes):
-    maze.edges[u, v]['weight'] = +3 
-    # definir isso de forma automatizada colocando pesos (recompensas de vida) 
-    # que façam o jogador questionar se vale a pena ou não entrar em algum 
+    maze.edges[u, v]['weight'] = +3
+    # definir isso de forma automatizada colocando pesos (recompensas de vida)
+    # que façam o jogador questionar se vale a pena ou não entrar em algum
     # checkpoint (beco sem saída) para aumentar sua pontuação de vida
   else:
     maze.edges[u, v]['weight'] = -1
@@ -86,8 +116,8 @@ maze_edge_labels = nx.get_edge_attributes(maze, 'weight')
 
 # Plotando labirinto
 plt.figure(figsize=(5, 5))
-plt.title("Maze with game weights\n")
-nx.draw(maze, pos_grid, with_labels=True, node_color='skyblue', node_size=500, edge_color='gray', font_size=9)
+plt.title(f"Maze with game weights\nStart: {start}, End: {end}")
+nx.draw(maze, pos_grid, with_labels=True, node_color=node_colors, node_size=500, edge_color='gray', font_size=9)
 nx.draw_networkx_edge_labels(maze, pos_grid, edge_labels=maze_edge_labels, font_color='red', font_size=9)
 
 plt.show()

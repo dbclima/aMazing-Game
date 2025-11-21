@@ -9,6 +9,9 @@
 - Maze Generation Algorithms - An Exploration 
   https://professor-l.github.io/mazes/
 
+- Longest path in an undirected tree 
+  https://www.geeksforgeeks.org/dsa/longest-path-undirected-tree/
+
 
 Definição de Labirintos "Perfeitos":
 'Labirintos sem laços são conhecidos como labirintos "simplesmente conectados" ou "perfeitos" e são equivalentes a uma árvore na teoria dos grafos.'
