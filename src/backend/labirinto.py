@@ -48,7 +48,7 @@ def solucionar_labirinto(labirinto: Labirinto) -> Tuple[int, List[Tuple[int, int
 
     distancias = nx.single_source_shortest_path(labirinto.grafo, labirinto.origem)
 
-    solucoes.append(len(distancias[labirinto.chegada]), distancias[labirinto.chegada])
+    solucoes.append((len(distancias[labirinto.chegada]), distancias[labirinto.chegada]))
 
     for v in labirinto.checkpoints.keys():
         novos_checkpoints = labirinto.checkpoints.copy()
@@ -60,15 +60,30 @@ def solucionar_labirinto(labirinto: Labirinto) -> Tuple[int, List[Tuple[int, int
             v,
             labirinto.chegada,
             novos_checkpoints
-        ) 
+        )
+
+        custo_minimo, caminho = solucionar_labirinto(novo_labirinto) 
+
+        solucoes.append((custo_minimo + labirinto.checkpoints[v] + len(distancias[v]) - 1, distancias[v] + caminho[1:]))
+
+    solucao_otima = sorted(solucoes)[0]
+    custo, caminho = solucao_otima
+
+    print(custo, caminho)
 
     return solucao_otima
 
 if __name__ == "__main__":
     labirinto = criar_labirinto(3, 3)
+    custo, caminho = solucionar_labirinto(labirinto)
 
-    print(labirinto.grafo.edges())
+    # print(labirinto.origem, labirinto.chegada)
+    print(labirinto.checkpoints)
+    for u, v in labirinto.grafo.edges():
+        # print(f"{u} -> {v}")
+        pass
 
-    # print(labirinto.partida)
-    # solucionar_labirinto(labirinto)
+    print(custo, caminho)
+
+
 
