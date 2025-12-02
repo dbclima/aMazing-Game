@@ -146,53 +146,58 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            keys = pygame.key.get_pressed()
+            dr, dc = 0, 0
+
+            if keys[pygame.K_UP]:
+                dr = -1
+            elif keys[pygame.K_DOWN]:
+                dr = 1
+            elif keys[pygame.K_LEFT]:
+                dc = -1
+            elif keys[pygame.K_RIGHT]:
+                dc = 1
+
+            if dr != 0 or dc != 0:
+                antigo = tuple(playerPos)
+                novo = (playerPos[0] + dr, playerPos[1] + dc)
+
+                # verifica se está dentro da grid E se há aresta
+                if (
+                    0 <= novo[0] < linhasLabirinto
+                    and 0 <= novo[1] < colunasLabirinto
+                    and (antigo, novo) in arestas
+                ):
+                    w = arestas[(antigo, novo)]  # peso da aresta = delta de vida
+                    playerPos[:] = list(novo)
+
+                    currentXP += w
+                    # se quiser, pode travar em 0 pra não ficar negativo:
+                    if currentXP < 0:
+                        currentXP = 0
+                        tempoFinal = time.time() - tempoInicial
+                        print("Não conseguiu terminar")
+                        print("Tempo:", round(tempoFinal, 2), "s")
+                        running = False
+
+                    # checkpoint (só conta uma vez)
+                    if novo in CHECKPOINTS and novo not in checkpointsVisitados:
+                        currentXP += CHECKPOINTS[novo]
+                        checkpointsVisitados.add(novo)
+
+                    # chegou ao fim?
+                    if novo == posChegada:
+                        tempoFinal = time.time() - tempoInicial
+                        print("Fim do nível!")
+                        print("Vida final:", currentXP)
+                        print("Tempo:", round(tempoFinal, 2), "s")
+                        running = False
 
     # fundo
     screen.fill("#C7E2E4")
 
     # --- MOVIMENTO DO JOGADOR ---
-    keys = pygame.key.get_pressed()
-    dr, dc = 0, 0
-
-    if keys[pygame.K_UP]:
-        dr = -1
-    elif keys[pygame.K_DOWN]:
-        dr = 1
-    elif keys[pygame.K_LEFT]:
-        dc = -1
-    elif keys[pygame.K_RIGHT]:
-        dc = 1
-
-    if dr != 0 or dc != 0:
-        antigo = tuple(playerPos)
-        novo = (playerPos[0] + dr, playerPos[1] + dc)
-
-        # verifica se está dentro da grid E se há aresta
-        if (
-            0 <= novo[0] < linhasLabirinto
-            and 0 <= novo[1] < colunasLabirinto
-            and (antigo, novo) in arestas
-        ):
-            w = arestas[(antigo, novo)]  # peso da aresta = delta de vida
-            playerPos[:] = list(novo)
-
-            currentXP += w
-            # se quiser, pode travar em 0 pra não ficar negativo:
-            if currentXP < 0:
-                currentXP = 0
-
-            # checkpoint (só conta uma vez)
-            if novo in CHECKPOINTS and novo not in checkpointsVisitados:
-                currentXP += CHECKPOINTS[novo]
-                checkpointsVisitados.add(novo)
-
-            # chegou ao fim?
-            if novo == posChegada:
-                tempoFinal = time.time() - tempoInicial
-                print("Fim do nível!")
-                print("Vida final:", currentXP)
-                print("Tempo:", round(tempoFinal, 2), "s")
-                running = False
 
     # --- DESENHAR LABIRINTO ---
     desenharLabirinto(screen)
