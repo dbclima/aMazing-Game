@@ -108,13 +108,13 @@ def desenharLabirinto(screen):
             rectCEL = pygame.Rect(x, y, tamCEL, tamCEL)
 
             # piso
-            pygame.draw.rect(screen, (255, 255, 255), rectCEL)
+            pygame.draw.rect(screen, (158, 234, 239), rectCEL)
 
             pos = (r, c)
 
             # cores especiais
             if pos == (linhaOrigem, colunaOrigem):
-                pygame.draw.rect(screen, (0, 120, 255), rectCEL)  # início
+                pygame.draw.rect(screen, (0, 204, 219), rectCEL)  # início
             elif pos == posChegada:
                 pygame.draw.rect(screen, (255, 215, 0), rectCEL)  # chegada
             elif pos in CHECKPOINTS:
@@ -123,19 +123,19 @@ def desenharLabirinto(screen):
             # paredes
             # top
             if r == 0 or not temAresta(pos, (r - 1, c)):
-                pygame.draw.line(screen, (0, 0, 0), (x, y), (x + tamCEL, y), 3)
+                pygame.draw.line(screen, (0, 184, 197), (x, y), (x + tamCEL, y), 3)
             # bottom
             if r == linhasLabirinto - 1 or not temAresta(pos, (r + 1, c)):
                 pygame.draw.line(
-                    screen, (0, 0, 0), (x, y + tamCEL), (x + tamCEL, y + tamCEL), 3
+                    screen, (0, 184, 197), (x, y + tamCEL), (x + tamCEL, y + tamCEL), 3
                 )
             # left
             if c == 0 or not temAresta(pos, (r, c - 1)):
-                pygame.draw.line(screen, (0, 0, 0), (x, y), (x, y + tamCEL), 3)
+                pygame.draw.line(screen, (0, 184, 197), (x, y), (x, y + tamCEL), 3)
             # right
             if c == colunasLabirinto - 1 or not temAresta(pos, (r, c + 1)):
                 pygame.draw.line(
-                    screen, (0, 0, 0), (x + tamCEL, y), (x + tamCEL, y + tamCEL), 3
+                    screen, (0, 184, 197), (x + tamCEL, y), (x + tamCEL, y + tamCEL), 3
                 )
 
 
