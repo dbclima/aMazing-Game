@@ -97,6 +97,19 @@ alturaLAB = linhasLabirinto * tamCEL
 labRECT = pygame.Rect((screen.get_width()  - larguraLAB)  // 2, (screen.get_height() - alturaLAB) // 2 + 40, larguraLAB, alturaLAB)
 
 
+def desenhaBoneco():
+    icon_image = pygame.image.load('src/frontend/img/icon.png')
+    scaled_image = pygame.transform.scale(icon_image, (tamCEL, tamCEL))
+    screen.blit(scaled_image, (px - tamCEL//2, py - tamCEL//2))
+
+def desenhaIglu():
+    icon_image = pygame.image.load('src/frontend/img/igluicon.png')
+    scaled_image = pygame.transform.scale(icon_image, (tamCEL, tamCEL))
+    x = labRECT.x + (colunasLabirinto - 1) * tamCEL
+    y = labRECT.y + (linhasLabirinto - 1) * tamCEL
+    screen.blit(scaled_image, (x , y))
+
+
 def temAresta(a, b):
     return (a, b) in arestas
 
@@ -116,9 +129,9 @@ def desenharLabirinto(screen):
             # cores especiais
             # if pos == (linhaOrigem, colunaOrigem):
                 # pygame.draw.rect(screen, (0, 204, 219), rectCEL)  # início
-            if pos == posChegada:
-                pygame.draw.rect(screen, (255, 215, 0), rectCEL)  # chegada
-            elif pos in CHECKPOINTS:
+            # if pos == posChegada:
+            #     pygame.draw.rect(screen, (255, 215, 0), rectCEL)  # chegada
+            if pos in CHECKPOINTS:
                 pygame.draw.rect(screen, (0, 200, 0), rectCEL)  # checkpoint
 
             # paredes
@@ -211,9 +224,9 @@ while running:
     px = labRECT.x + playerPos[1] * tamCEL + tamCEL // 2
     py = labRECT.y + playerPos[0] * tamCEL + tamCEL // 2
     pygame.draw.circle(screen, (255, 100, 100), (px, py), tamCEL // 3)
-    icon_image = pygame.image.load('src/frontend/img/icon.png')
-    scaled_image = pygame.transform.scale(icon_image, (tamCEL, tamCEL))
-    screen.blit(scaled_image, (px - tamCEL//2, py - tamCEL//2))
+    desenhaBoneco()
+    desenhaIglu()
+
 
     #--------- HUD DE VIDA (XP) ---------#
     drawShadow(screen, XPDimensions, offset=(-3, 3))
