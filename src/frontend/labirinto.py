@@ -109,6 +109,11 @@ def desenhaIglu():
     y = labRECT.y + (linhasLabirinto - 1) * tamCEL
     screen.blit(scaled_image, (x , y))
 
+def desenhaSorvete(x,y):
+    icon_image = pygame.image.load('src/frontend/img/iconSorvete.png')
+    scaled_image = pygame.transform.scale(icon_image, (tamCEL, tamCEL))
+    screen.blit(scaled_image, (x , y))
+
 
 def temAresta(a, b):
     return (a, b) in arestas
@@ -132,7 +137,8 @@ def desenharLabirinto(screen):
             # if pos == posChegada:
             #     pygame.draw.rect(screen, (255, 215, 0), rectCEL)  # chegada
             if pos in CHECKPOINTS:
-                pygame.draw.rect(screen, (0, 200, 0), rectCEL)  # checkpoint
+                desenhaSorvete(x,y)
+                # pygame.draw.rect(screen, (0, 200, 0), rectCEL)  # checkpoint
 
             # paredes
             # top
