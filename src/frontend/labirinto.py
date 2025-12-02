@@ -54,6 +54,7 @@ dados = {
         {"de": [2, 0], "para": [3, 0], "peso": -1},
         {"de": [2, 1], "para": [2, 2], "peso": -1},
         {"de": [2, 2], "para": [3, 2], "peso": -1},
+        {"de": [2, 2], "para": [2, 3], "peso": -1},
         {"de": [3, 0], "para": [4, 0], "peso": -1},
         {"de": [3, 1], "para": [4, 1], "peso": -1},
         {"de": [3, 1], "para": [3, 0], "peso": -1},
@@ -210,6 +211,9 @@ while running:
     px = labRECT.x + playerPos[1] * tamCEL + tamCEL // 2
     py = labRECT.y + playerPos[0] * tamCEL + tamCEL // 2
     pygame.draw.circle(screen, (255, 100, 100), (px, py), tamCEL // 3)
+    icon_image = pygame.image.load('src/frontend/img/icon.png')
+    scaled_image = pygame.transform.scale(icon_image, (tamCEL, tamCEL))
+    screen.blit(scaled_image, (px - tamCEL//2, py - tamCEL//2))
 
     #--------- HUD DE VIDA (XP) ---------#
     drawShadow(screen, XPDimensions, offset=(-3, 3))
