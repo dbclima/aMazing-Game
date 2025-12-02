@@ -43,12 +43,12 @@ def criar_labirinto(n_linhas: int, n_colunas: int, algoritmo="kruskal") -> Labir
     
 # Funcao ainda em construcao
 def solucionar_labirinto(labirinto: Labirinto) -> Tuple[int, List[Tuple[int, int]]]:
-    solucao_otima = 0
     solucoes = []
 
     distancias = nx.single_source_shortest_path(labirinto.grafo, labirinto.origem)
 
-    solucoes.append((len(distancias[labirinto.chegada]), distancias[labirinto.chegada]))
+    VERTICE_INICIO = 1
+    solucoes.append((len(distancias[labirinto.chegada]) - VERTICE_INICIO, distancias[labirinto.chegada]))
 
     for v in labirinto.checkpoints.keys():
         novos_checkpoints = labirinto.checkpoints.copy()
@@ -64,7 +64,9 @@ def solucionar_labirinto(labirinto: Labirinto) -> Tuple[int, List[Tuple[int, int
 
         custo_minimo, caminho = solucionar_labirinto(novo_labirinto) 
 
-        solucoes.append((custo_minimo + labirinto.checkpoints[v] + len(distancias[v]) - 1, distancias[v] + caminho[1:]))
+        VERTICE_INICIO = 1
+        VERTICE_CHECKPOINT = 1
+        solucoes.append((custo_minimo + labirinto.checkpoints[v] + len(distancias[v]) - VERTICE_INICIO - VERTICE_CHECKPOINT, distancias[v] + caminho[1:]))
 
     solucao_otima = sorted(solucoes)[0]
     custo, caminho = solucao_otima
@@ -79,9 +81,9 @@ if __name__ == "__main__":
 
     # print(labirinto.origem, labirinto.chegada)
     print(labirinto.checkpoints)
-    for u, v in labirinto.grafo.edges():
+    # for u, v in labirinto.grafo.edges():
         # print(f"{u} -> {v}")
-        pass
+        
 
     print(custo, caminho)
 
