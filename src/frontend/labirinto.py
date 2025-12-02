@@ -88,8 +88,12 @@ for e in dadosLabirinto["arestas"]:
     arestas[(v, u)] = w  # movimento nos dois sentidos
 
 
-tamCEL = 60
-labRECT = pygame.Rect(100, 150, 1080, 500)
+tamCEL = 80
+
+larguraLAB = colunasLabirinto * tamCEL
+alturaLAB = linhasLabirinto * tamCEL
+
+labRECT = pygame.Rect((screen.get_width()  - larguraLAB)  // 2, (screen.get_height() - alturaLAB) // 2 + 40, larguraLAB, alturaLAB)
 
 
 def temAresta(a, b):
