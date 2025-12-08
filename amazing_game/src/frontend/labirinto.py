@@ -1,6 +1,7 @@
 import pygame
+from pathlib import Path
 import time
-import backend.labirinto as lab
+from ..backend import criar_labirinto, Dificuldade, transforma_labirinto_para_json_front
 
 
 # pygame setup
@@ -31,44 +32,45 @@ def drawShadow(screen, rect, border_radius=40, offset=(5, 5), shadow_color=(0, 0
 
 
 
-dados = lab.criar_labirinto(0, 3, 3, maximo_checkpoints=8, dificuldade=lab.Dificuldade.DIFICIL)
+labirinto = criar_labirinto(0, 3, 3, maximo_checkpoints=8, dificuldade=Dificuldade.DIFICIL)
+dados = transforma_labirinto_para_json_front(labirinto)
 
 
 #------ Dados aleatórios (mock do backend) ------#
-dados = {
-    "nivel": 1,
-    "linhas": 5,
-    "colunas": 4,  
-    "origem": [0, 0],
-    "chegada": [4, 3],
-    "vidaInicial": 30,
-    "checkpoints": [
-        {"pos": (0, 2), "bonus": 2},
-        {"pos": (1, 0), "bonus": 7},
-        {"pos": (2, 3), "bonus": 8},
-        {"pos": (3, 1), "bonus": 5},
-    ],
-    "arestas": [
-        {"de": [0, 0], "para": [0, 1], "peso": -1},
-        {"de": [0, 1], "para": [0, 2], "peso": -1},
-        {"de": [0, 1], "para": [1, 1], "peso": -1},
-        {"de": [0, 2], "para": [1, 2], "peso": -1},
-        {"de": [1, 1], "para": [2, 1], "peso": -1},
-        {"de": [1, 1], "para": [1, 0], "peso": -1},
-        {"de": [1, 0], "para": [2, 0], "peso": -1},
-        {"de": [1, 0], "para": [1, 1], "peso": -1},
-        {"de": [2, 0], "para": [3, 0], "peso": -1},
-        {"de": [2, 1], "para": [2, 2], "peso": -1},
-        {"de": [2, 2], "para": [3, 2], "peso": -1},
-        {"de": [2, 2], "para": [2, 3], "peso": -1},
-        {"de": [3, 0], "para": [4, 0], "peso": -1},
-        {"de": [3, 1], "para": [4, 1], "peso": -1},
-        {"de": [3, 1], "para": [3, 0], "peso": -1},
-        {"de": [3, 2], "para": [4, 2], "peso": -1},
-        {"de": [4, 1], "para": [4, 2], "peso": -1},
-        {"de": [4, 2], "para": [4, 3], "peso": -1},
-    ],
-}
+# dados = {
+#     "nivel": 1,
+#     "linhas": 5,
+#     "colunas": 4,  
+#     "origem": [0, 0],
+#     "chegada": [4, 3],
+#     "vidaInicial": 30,
+#     "checkpoints": [
+#         {"pos": (0, 2), "bonus": 2},
+#         {"pos": (1, 0), "bonus": 7},
+#         {"pos": (2, 3), "bonus": 8},
+#         {"pos": (3, 1), "bonus": 5},
+#     ],
+#     "arestas": [
+#         {"de": [0, 0], "para": [0, 1], "peso": -1},
+#         {"de": [0, 1], "para": [0, 2], "peso": -1},
+#         {"de": [0, 1], "para": [1, 1], "peso": -1},
+#         {"de": [0, 2], "para": [1, 2], "peso": -1},
+#         {"de": [1, 1], "para": [2, 1], "peso": -1},
+#         {"de": [1, 1], "para": [1, 0], "peso": -1},
+#         {"de": [1, 0], "para": [2, 0], "peso": -1},
+#         {"de": [1, 0], "para": [1, 1], "peso": -1},
+#         {"de": [2, 0], "para": [3, 0], "peso": -1},
+#         {"de": [2, 1], "para": [2, 2], "peso": -1},
+#         {"de": [2, 2], "para": [3, 2], "peso": -1},
+#         {"de": [2, 2], "para": [2, 3], "peso": -1},
+#         {"de": [3, 0], "para": [4, 0], "peso": -1},
+#         {"de": [3, 1], "para": [4, 1], "peso": -1},
+#         {"de": [3, 1], "para": [3, 0], "peso": -1},
+#         {"de": [3, 2], "para": [4, 2], "peso": -1},
+#         {"de": [4, 1], "para": [4, 2], "peso": -1},
+#         {"de": [4, 2], "para": [4, 3], "peso": -1},
+#     ],
+# }
 
 #------ Configurações do Labirinto ------#
 
@@ -104,19 +106,20 @@ labRECT = pygame.Rect((screen.get_width()  - larguraLAB)  // 2, (screen.get_heig
 
 
 def desenhaBoneco():
-    icon_image = pygame.image.load('src/frontend/img/icon.png')
+    icon_image = pygame.image.load(r'amazing_game\src\frontend\img\icon.png')
     scaled_image = pygame.transform.scale(icon_image, (tamCEL, tamCEL))
     screen.blit(scaled_image, (px - tamCEL//2, py - tamCEL//2))
 
 def desenhaIglu():
-    icon_image = pygame.image.load('src/frontend/img/igluicon.png')
+    icon_image = pygame.image.load(r'amazing_game\src\frontend\img\igluicon.png')
     scaled_image = pygame.transform.scale(icon_image, (tamCEL, tamCEL))
     x = labRECT.x + (colunasLabirinto - 1) * tamCEL
     y = labRECT.y + (linhasLabirinto - 1) * tamCEL
     screen.blit(scaled_image, (x , y))
 
 def desenhaSorvete(x,y):
-    icon_image = pygame.image.load('src/frontend/img/iconSorvete.png')
+    print(Path(".").cwd())
+    icon_image = pygame.image.load(r'amazing_game\src\frontend\img\iconSorvete.png')
     scaled_image = pygame.transform.scale(icon_image, (tamCEL, tamCEL))
     screen.blit(scaled_image, (x , y))
 

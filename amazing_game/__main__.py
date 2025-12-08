@@ -1,0 +1,1 @@
+from .src.frontend import labirinto
