@@ -103,13 +103,13 @@ if __name__ == "__main__":
     print(checkpoint_nodes)
 
     for u, v in maze.edges():
-      if(v in checkpoint_nodes or u in checkpoint_nodes):
-        maze.edges[u, v]['weight'] = +3
-        # definir isso de forma automatizada colocando pesos (recompensas de vida)
-        # que façam o jogador questionar se vale a pena ou não entrar em algum
-        # checkpoint (beco sem saída) para aumentar sua pontuação de vida
-      else:
-        maze.edges[u, v]['weight'] = -1
+        if(v in checkpoint_nodes or u in checkpoint_nodes):
+            maze.edges[u, v]['weight'] = +3
+            # definir isso de forma automatizada colocando pesos (recompensas de vida)
+            # que façam o jogador questionar se vale a pena ou não entrar em algum
+            # checkpoint (beco sem saída) para aumentar sua pontuação de vida
+        else:
+            maze.edges[u, v]['weight'] = -1
 
 
     maze_edge_labels = nx.get_edge_attributes(maze, 'weight')
