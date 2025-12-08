@@ -1,5 +1,7 @@
 import pygame
 import time
+import backend.labirinto as lab
+
 
 # pygame setup
 pygame.init()
@@ -26,6 +28,10 @@ def drawShadow(screen, rect, border_radius=40, offset=(5, 5), shadow_color=(0, 0
     )
     dest = rect.move(*offset)
     screen.blit(sombra, dest.topleft)
+
+
+
+dados = lab.criar_labirinto(0, 3, 3, maximo_checkpoints=8, dificuldade=lab.Dificuldade.DIFICIL)
 
 
 #------ Dados aleatórios (mock do backend) ------#

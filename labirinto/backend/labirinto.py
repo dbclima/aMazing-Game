@@ -142,14 +142,16 @@ if __name__ == "__main__":
     labirinto = criar_labirinto(0, 3, 3, maximo_checkpoints=8, dificuldade=Dificuldade.DIFICIL)
     custo, caminho = solucionar_labirinto(labirinto)
 
+    for u,v in labirinto.grafo.edges():
+        print(labirinto.grafo.edges[u,v]["weight"])
     # print(labirinto.origem, labirinto.chegada)
-    print(labirinto.checkpoints)
-    print(labirinto.vida_inicial)
+    # print(labirinto.checkpoints)
+    # print(labirinto.vida_inicial)
     # for u, v in labirinto.grafo.edges():
         # print(f"{u} -> {v}")
         
 
-    print(custo - 1, caminho)
+    # print(custo - 1, caminho)
 
 
 
