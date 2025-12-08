@@ -5,7 +5,7 @@ from enum import Enum, auto
 
 import networkx as nx
 
-from randomized_perfect_maze import create_perfect_maze_from_MST
+from .randomized_perfect_maze import create_perfect_maze_from_MST
 
 class Dificuldade(Enum):
     FACIL = auto()
@@ -139,17 +139,17 @@ def criar_labirinto(id: int, n_linhas: int, n_colunas: int, algoritmo="kruskal",
     
 
 if __name__ == "__main__":
-    labirinto = criar_labirinto(0, 3, 3, maximo_checkpoints=8, dificuldade=Dificuldade.DIFICIL)
+    labirinto = criar_labirinto(0, 6, 6, maximo_checkpoints=4, dificuldade=Dificuldade.DIFICIL)
     custo, caminho = solucionar_labirinto(labirinto)
 
     # print(labirinto.origem, labirinto.chegada)
     print(labirinto.checkpoints)
-    print(labirinto.vida_inicial)
+    # print(labirinto.vida_inicial)
     # for u, v in labirinto.grafo.edges():
         # print(f"{u} -> {v}")
         
 
-    print(custo - 1, caminho)
+    # print(custo - 1, caminho)
 
 
 
