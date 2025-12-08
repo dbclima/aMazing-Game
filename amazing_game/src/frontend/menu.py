@@ -104,7 +104,7 @@ while running:
     screen.fill("#C7E2E4")
     
     #------ BONECO DE NEVE ------#
-    icon_image = pygame.image.load('src/frontend/img/icon.png')
+    icon_image = pygame.image.load('amazing_game/src/frontend/img/icon.png')
     scaled_image = icon_image.get_rect()
     scaled_image.center = (640, 360)
     screen.blit(icon_image, scaled_image)
