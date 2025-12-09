@@ -56,7 +56,6 @@ def telaLabirinto(screen, nivel, nome_jogador):
         v = tuple(e["para"])
         w = e["peso"]
         arestas[(u, v)] = w
-        arestas[(v, u)] = w  # movimento nos dois sentidos
 
     tamCEL = 80
 
@@ -84,9 +83,10 @@ def telaLabirinto(screen, nivel, nome_jogador):
     def desenhaBoneco(px, py):
         screen.blit(boneco_img, (px - tamCEL // 2, py - tamCEL // 2))
 
+    print(posChegada)
     def desenhaIglu():
-        x = labRECT.x + (colunasLabirinto - 1) * tamCEL
-        y = labRECT.y + (linhasLabirinto - 1) * tamCEL
+        x = labRECT.x + (posChegada[1]) * tamCEL
+        y = labRECT.y + (posChegada[0]) * tamCEL
         screen.blit(iglu_img, (x, y))
 
     def desenhaSorvete(x, y):
@@ -159,11 +159,14 @@ def telaLabirinto(screen, nivel, nome_jogador):
                         and 0 <= novo[1] < colunasLabirinto
                         and (antigo, novo) in arestas
                     ):
+                        
                         w = arestas[(antigo, novo)]
+                        print(arestas)
                         playerPos[:] = list(novo)
 
                         nonlocal_currentXP = True  
                         currentXP += w
+                        print(currentXP, w)
                         if currentXP < 0:
                             currentXP = 0
                             tempoFinal = time.time() - tempoInicial
@@ -172,8 +175,11 @@ def telaLabirinto(screen, nivel, nome_jogador):
                             return False, currentXP, round(tempoFinal, 2)
 
                         if novo in CHECKPOINTS and novo not in checkpointsVisitados:
-                            currentXP += CHECKPOINTS[novo]
-                            checkpointsVisitados.add(novo)
+                            # currentXP += CHECKPOINTS[novo]
+                            # checkpointsVisitados.add(novo)
+                            arestas[(antigo, novo)] = -1
+
+                            print(CHECKPOINTS[novo])
 
                         if novo == posChegada:
                             tempoFinal = time.time() - tempoInicial
