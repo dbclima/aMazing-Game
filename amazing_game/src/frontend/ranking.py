@@ -7,7 +7,6 @@ def draw_pill(surface, rect, text, font, hovered,
               text_color=(26, 127, 189)):
     border_radius = rect.height // 2
 
-    # sombra estilo Figma (camadas suaves)
     shadow_layers = [
         (2, 2, 20),
         (3, 3, 15),
@@ -24,17 +23,14 @@ def draw_pill(surface, rect, text, font, hovered,
         )
         surface.blit(shadow, (rect.x + dx, rect.y + dy))
 
-    # corpo do botão
     color = hover_color if hovered else bg_color
     pygame.draw.rect(surface, color, rect, border_radius=border_radius)
 
-    # texto centralizado
     txt = font.render(text, True, text_color)
     surface.blit(txt, txt.get_rect(center=rect.center))
 
 
 def ranking():
-# Configurações da tela
   WIDTH, HEIGHT = 1280, 720
   screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -65,10 +61,10 @@ def ranking():
     # Fundo geral
     screen.fill(BACKGROUND_COLOR)
 
-    # --- Retângulo do ranking (menor e centralizado) ---
+    # --- Retângulo do ranking ---
     ranking_rect = pygame.Rect(0, 0, int(WIDTH * 0.8), int(HEIGHT * 0.65))
     ranking_rect.centerx = WIDTH // 2
-    ranking_rect.top = 120  # distância do topo (abaixo do título)
+    ranking_rect.top = 120  # distância do topo 
 
     pygame.draw.rect(screen, RANKING_BG, ranking_rect, border_radius=25)
 
@@ -92,8 +88,8 @@ def ranking():
         screen.blit(surf, rect)
 
     # --- Linhas do ranking ---
-    row_y = header_y + 40   # primeira linha depois do cabeçalho
-    row_step = 35           # distância vertical entre linhas
+    row_y = header_y + 40   
+    row_step = 35          
 
     for idx, (nome, xp, tempo) in enumerate(ranking[:10], start=1):
         valores = [str(idx), nome, str(xp), tempo]
@@ -105,7 +101,7 @@ def ranking():
 
         row_y += row_step
 
-    # --- Botão MENU (mantém como estava, só desenha depois do ranking) ---
+    # --- Botão MENU  ---
     mx, my = pygame.mouse.get_pos()
     hovered = button_rect.collidepoint((mx, my))
 
