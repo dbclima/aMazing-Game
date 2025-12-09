@@ -3,21 +3,7 @@ import string
 
 ALLOWED_CHARS = string.ascii_letters + string.digits + " "
 
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
-running = True
-
-# Estado do input 
-active = False
-textPlayer = ""
-visibilidadeCursor = True
-last_switch = 0
-CURSOR_PERIOD = 400  # ms
-
 def drawShadow(screen, rect, border_radius=40, offset=(5, 5), shadow_color=(0, 0, 0, 90)):
-    """Desenha uma sombra arredondada atrás de um rect."""
     sombra = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
     pygame.draw.rect(
         sombra,
@@ -29,84 +15,87 @@ def drawShadow(screen, rect, border_radius=40, offset=(5, 5), shadow_color=(0, 0
     screen.blit(sombra, dest.topleft)
 
 
-# Dimensões do retângulo da base
-baseDimensions = pygame.Rect(0, 0, 480, 189)
+def Nome(screen):
+    clock = pygame.time.Clock()
 
-# Dimensões da caixa de input
-inputDimensions = pygame.Rect(0, 0, 360, 45)
+    # Estado do input
+    active = False
+    textPlayer = ""
 
-# Características de font
-fontTitulo = pygame.font.SysFont("Comic Sans MS", 40, bold=True)
-fontInput = pygame.font.SysFont("Arial", 32)
+    visibilidadeCursor = True
+    last_switch = 0
+    CURSOR_PERIOD = 400  # ms
 
-while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    # Dimensões
+    baseDimensions = pygame.Rect(0, 0, 480, 189)
+    inputDimensions = pygame.Rect(0, 0, 360, 45)
 
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            # ativa/desativa input quando clica na caixinha
-            active = inputDimensions.collidepoint(event.pos)
+    # Fonts
+    fontTitulo = pygame.font.SysFont("Comic Sans MS", 40, bold=True)
+    fontInput = pygame.font.SysFont("Arial", 32)
 
-        elif event.type == pygame.KEYDOWN:
-            # só processa teclas se o input estiver ativo
-            if not active:
-                continue
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                raise SystemExit
 
-            if event.key == pygame.K_BACKSPACE:
-                textPlayer = textPlayer[:-1]
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                active = inputDimensions.collidepoint(event.pos)
 
-            elif event.key == pygame.K_RETURN:
-                print("Nome digitado:", textPlayer)
+            elif event.type == pygame.KEYDOWN:
+                if not active:
+                    continue
 
-            else:
-                ch = event.unicode
-                # evita None / vazio e filtra caracteres estranhos
-                if ch in ALLOWED_CHARS and len(textPlayer) < 16:
-                    textPlayer += ch
+                if event.key == pygame.K_BACKSPACE:
+                    textPlayer = textPlayer[:-1]
 
+                elif event.key == pygame.K_RETURN:
+                    if textPlayer.strip() != "":
+                        return textPlayer  # ✅ AQUI MUDA DE TELA
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("#C7E2E4")
+                else:
+                    ch = event.unicode
+                    if ch in ALLOWED_CHARS and len(textPlayer) < 16:
+                        textPlayer += ch
 
+        # Cursor piscante
+        now = pygame.time.get_ticks()
+        if now - last_switch > CURSOR_PERIOD:
+            visibilidadeCursor = not visibilidadeCursor
+            last_switch = now
 
-    #------ CONFIGURAÇÕES DA BASE ------#
+        # Fundo
+        screen.fill("#C7E2E4")
 
-    drawShadow(screen, baseDimensions, offset=(-3, 3))
-    pygame.draw.rect(screen, "#7BD9E7", baseDimensions, border_radius=40)
-    baseDimensions.center = screen.get_rect().center
+        # Base
+        baseDimensions.center = screen.get_rect().center
+        drawShadow(screen, baseDimensions, offset=(-3, 3))
+        pygame.draw.rect(screen, "#7BD9E7", baseDimensions, border_radius=40)
 
-    #------ CONFIGURAÇÕES DE INPUT  ------#
+        # Input
+        inputDimensions.centerx = baseDimensions.centerx
+        inputDimensions.y = baseDimensions.y + 120
+        pygame.draw.rect(screen, "#C7E2E4", inputDimensions, border_radius=20)
 
-    # Estilização do campo de input
-    inputDimensions.centerx = baseDimensions.centerx
-    inputDimensions.y = baseDimensions.y + 120
-    pygame.draw.rect(screen, "#C7E2E4", inputDimensions, border_radius=20)
+        text = fontInput.render(textPlayer, True, (50, 50, 50))
+        textRect = text.get_rect(midleft=(inputDimensions.x + 12, inputDimensions.centery))
+        screen.blit(text, textRect)
 
+        if active and visibilidadeCursor:
+            cursor_x = textRect.right + 3
+            pygame.draw.line(
+                screen,
+                (50, 50, 50),
+                (cursor_x, inputDimensions.y + 10),
+                (cursor_x, inputDimensions.bottom - 10),
+                2
+            )
 
-    # Estilização do input
-    text = fontInput.render(textPlayer, True, (50, 50, 50))
-    textRect = text.get_rect(midleft=(inputDimensions.x + 12, inputDimensions.centery))
-    screen.blit(text, textRect)
+        # Título
+        titulo = fontTitulo.render("ESCREVA SEU NOME", True, (26, 127, 189))
+        tituloRect = titulo.get_rect(center=(baseDimensions.centerx, baseDimensions.y + 60))
+        screen.blit(titulo, tituloRect)
 
-    # Cursor
-    if active and visibilidadeCursor:
-        cursor_x = textRect.right + 3
-        pygame.draw.line(screen, (50, 50, 50), (cursor_x, inputDimensions.y + 10), (cursor_x, inputDimensions.bottom - 10), 2)
-
-    #------ CONFIGURAÇÕES DO TÍTULO  ------#
-    titulo = fontTitulo.render("ESCREVA SEU NOME", True, (26, 127,189))
-    tituloRect = titulo.get_rect(center = (baseDimensions.centerx, baseDimensions.y + 60))
-    screen.blit(titulo, tituloRect)
-
-
-    # flip() the display to put your work on screen
-    pygame.display.flip()
-
-    clock.tick(60)  # limits FPS to 60
-
-pygame.quit()
-
-# FALTA INTEGRAR COM O BACK E MANDAR PARA PÁGINA INICIAL
+        pygame.display.flip()
+        clock.tick(60)
