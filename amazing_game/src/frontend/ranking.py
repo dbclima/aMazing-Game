@@ -1,7 +1,37 @@
 import pygame
 import sys
 
-# pygame.init()
+def draw_pill(surface, rect, text, font, hovered,
+              bg_color=(123, 217, 231),
+              hover_color=(140, 240, 255),
+              text_color=(26, 127, 189)):
+    border_radius = rect.height // 2
+
+    # sombra estilo Figma (camadas suaves)
+    shadow_layers = [
+        (2, 2, 20),
+        (3, 3, 15),
+        (4, 4, 10),
+    ]
+
+    for dx, dy, alpha in shadow_layers:
+        shadow = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
+        pygame.draw.rect(
+            shadow,
+            (0, 0, 0, alpha),
+            shadow.get_rect(),
+            border_radius=border_radius
+        )
+        surface.blit(shadow, (rect.x + dx, rect.y + dy))
+
+    # corpo do botão
+    color = hover_color if hovered else bg_color
+    pygame.draw.rect(surface, color, rect, border_radius=border_radius)
+
+    # texto centralizado
+    txt = font.render(text, True, text_color)
+    surface.blit(txt, txt.get_rect(center=rect.center))
+
 
 def ranking():
 # Configurações da tela
@@ -17,7 +47,7 @@ def ranking():
 
   # Fonte
   font = pygame.font.SysFont("arial", 24)
-  title_font = pygame.font.SysFont("arial", 32, bold=True)
+  title_font = pygame.font.SysFont("Comic Sans MS", 32, bold=True)
 
   # Ranking (máx. 10)
   ranking = [
@@ -29,7 +59,7 @@ def ranking():
   ]
 
   # Botão Menu
-  button_rect = pygame.Rect(WIDTH//2 - 80, HEIGHT - 80, 160, 50)
+  button_rect = pygame.Rect(WIDTH//2 - 200, HEIGHT - 90, 400, 70)
 
   def draw_ranking():
       # Fundo geral
@@ -58,11 +88,17 @@ def ranking():
           y += 35
 
       # Botão Menu
-      pygame.draw.rect(screen, (255, 255, 255), button_rect, border_radius=10)
-      pygame.draw.rect(screen, (0, 0, 0), button_rect, 2, border_radius=10)
+      mx, my = pygame.mouse.get_pos()
+      hovered = button_rect.collidepoint((mx, my))
 
-      text = font.render("Voltar", True, (0, 0, 0))
-      screen.blit(text, (button_rect.x + 45, button_rect.y + 10))
+      draw_pill(
+        screen,
+        button_rect,
+        "VOLTAR",
+        title_font,
+        hovered
+    )
+
 
       pygame.display.update()
 
