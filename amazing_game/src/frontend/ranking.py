@@ -7,7 +7,6 @@ def draw_pill(surface, rect, text, font, hovered,
               text_color=(26, 127, 189)):
     border_radius = rect.height // 2
 
-    # sombra estilo Figma (camadas suaves)
     shadow_layers = [
         (2, 2, 20),
         (3, 3, 15),
@@ -24,17 +23,14 @@ def draw_pill(surface, rect, text, font, hovered,
         )
         surface.blit(shadow, (rect.x + dx, rect.y + dy))
 
-    # corpo do botão
     color = hover_color if hovered else bg_color
     pygame.draw.rect(surface, color, rect, border_radius=border_radius)
 
-    # texto centralizado
     txt = font.render(text, True, text_color)
     surface.blit(txt, txt.get_rect(center=rect.center))
 
 
 def ranking(ranking):
-# Configurações da tela
   WIDTH, HEIGHT = 1280, 720
   screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -49,7 +45,7 @@ def ranking(ranking):
   font = pygame.font.SysFont("arial", 24)
   title_font = pygame.font.SysFont("Comic Sans MS", 32, bold=True)
 
-  # Ranking (máx. 10)
+#   # Ranking (máx. 10)
 #   ranking = [
 #       ("Alice", 1200, "02:13"),
 #       ("Bob", 1100, "02:50"),
@@ -62,36 +58,54 @@ def ranking(ranking):
   button_rect = pygame.Rect(WIDTH//2 - 200, HEIGHT - 90, 400, 70)
 
   def draw_ranking():
-      # Fundo geral
-      screen.fill(BACKGROUND_COLOR)
+    # Fundo geral
+    screen.fill(BACKGROUND_COLOR)
 
-      # Área do ranking
-      pygame.draw.rect(screen, RANKING_BG, (40, 40, WIDTH - 80, HEIGHT - 140), border_radius=12)
+    # --- Retângulo do ranking ---
+    ranking_rect = pygame.Rect(0, 0, int(WIDTH * 0.8), int(HEIGHT * 0.65))
+    ranking_rect.centerx = WIDTH // 2
+    ranking_rect.top = 120  # distância do topo 
 
-      # Título
-      title = title_font.render("Ranking", True, TEXT_COLOR)
-      screen.blit(title, (WIDTH//2 - title.get_width()//2, 55))
+    pygame.draw.rect(screen, RANKING_BG, ranking_rect, border_radius=25)
 
-      # Cabeçalho
-      screen.blit(font.render("Pos", True, TEXT_COLOR), (70, 100))
-      screen.blit(font.render("Nome", True, TEXT_COLOR), (130, 100))
-      screen.blit(font.render("XP", True, TEXT_COLOR), (330, 100))
-      screen.blit(font.render("Tempo", True, TEXT_COLOR), (420, 100))
+    # --- Título ---
+    title = title_font.render("RANKING", True, TEXT_COLOR)
+    screen.blit(title, title.get_rect(midtop=(WIDTH // 2, 40)))
 
-      # Linhas do ranking
-      y = 140
-      for i, (nome, xp, tempo) in enumerate(ranking[:10], start=1):
-          screen.blit(font.render(str(i), True, (0, 0, 0)), (70, y))
-          screen.blit(font.render(nome, True, (0, 0, 0)), (130, y))
-          screen.blit(font.render(str(xp), True, (0, 0, 0)), (330, y))
-          screen.blit(font.render(tempo, True, (0, 0, 0)), (420, y))
-          y += 35
+    # --- Colunas: Pos | Nome | XP | Tempo ---
+    col_count = 4
+    col_width = ranking_rect.width / col_count
+    col_centers = [
+        ranking_rect.left + col_width * (i + 0.5) for i in range(col_count)
+    ]
 
-      # Botão Menu
-      mx, my = pygame.mouse.get_pos()
-      hovered = button_rect.collidepoint((mx, my))
+    header_y = ranking_rect.top + 30
 
-      draw_pill(
+    headers = ["Pos", "Nome", "XP", "Tempo"]
+    for i, label in enumerate(headers):
+        surf = font.render(label, True, TEXT_COLOR)
+        rect = surf.get_rect(center=(col_centers[i], header_y))
+        screen.blit(surf, rect)
+
+    # --- Linhas do ranking ---
+    row_y = header_y + 40   
+    row_step = 35          
+
+    for idx, (nome, xp, tempo) in enumerate(ranking[:10], start=1):
+        valores = [str(idx), nome, str(xp), tempo]
+
+        for i, valor in enumerate(valores):
+            surf = font.render(valor, True, (0, 0, 0))
+            rect = surf.get_rect(center=(col_centers[i], row_y))
+            screen.blit(surf, rect)
+
+        row_y += row_step
+
+    # --- Botão MENU  ---
+    mx, my = pygame.mouse.get_pos()
+    hovered = button_rect.collidepoint((mx, my))
+
+    draw_pill(
         screen,
         button_rect,
         "VOLTAR",
@@ -99,8 +113,7 @@ def ranking(ranking):
         hovered
     )
 
-
-      pygame.display.update()
+    pygame.display.update()
 
 
   def ranking_screen():
