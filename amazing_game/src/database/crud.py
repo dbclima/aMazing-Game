@@ -1,8 +1,7 @@
 import json
 import networkx as nx
-from labirinto import Labirinto
-from labirinto import criar_labirinto
-from labirinto import Dificuldade
+from ..backend import Labirinto
+from ..backend import Dificuldade
 
 def saveLab(L: Labirinto):
     labirinto = {}
