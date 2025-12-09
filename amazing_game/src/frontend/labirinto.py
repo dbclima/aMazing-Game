@@ -82,8 +82,17 @@ def telaLabirinto(labirinto,screen):
         y = labRECT.y + (posChegada[0]) * tamCEL
         screen.blit(iglu_img, (x, y))
 
-    def desenhaSorvete(x, y):
+    def desenhaSorvete(x, y, valor):
+        checkpointFont = pygame.font.SysFont("arial", 22, bold=True)
+        # Desenha o sorvete
         screen.blit(sorvete_img, (x, y))
+
+        # Texto do valor
+        texto = f"{valor:+d}"   # ex: +5, -3
+        label = checkpointFont.render(texto, True, (255, 255, 255))
+
+        rect = label.get_rect(center=(x + tamCEL // 2, y + tamCEL // 2))
+        screen.blit(label, rect)
 
     def temAresta(a, b):
         return (a, b) in arestas
@@ -101,7 +110,8 @@ def telaLabirinto(labirinto,screen):
                 pos = (r, c)
 
                 if pos in CHECKPOINTS:
-                    desenhaSorvete(x, y)
+                    valor = CHECKPOINTS[pos]
+                    desenhaSorvete(x, y, valor)
 
                 # paredes
                 if r == 0 or not temAresta(pos, (r - 1, c)):
