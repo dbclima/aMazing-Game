@@ -71,13 +71,13 @@ def telaLabirinto(screen, nivel, nome_jogador):
     )
 
     #------ Carrega imagens ------#
-    boneco_img = pygame.image.load(r"amazing_game\src\frontend\img\icon.png").convert_alpha()
+    boneco_img = pygame.image.load(r"amazing_game/src/frontend/img/icon.png").convert_alpha()
     boneco_img = pygame.transform.scale(boneco_img, (tamCEL, tamCEL))
 
-    iglu_img = pygame.image.load(r"amazing_game\src\frontend\img\igluicon.png").convert_alpha()
+    iglu_img = pygame.image.load(r"amazing_game/src/frontend/img/igluicon.png").convert_alpha()
     iglu_img = pygame.transform.scale(iglu_img, (tamCEL, tamCEL))
 
-    sorvete_img = pygame.image.load(r"amazing_game\src\frontend\img\iconSorvete.png").convert_alpha()
+    sorvete_img = pygame.image.load(r"amazing_game/src/frontend/img/iconSorvete.png").convert_alpha()
     sorvete_img = pygame.transform.scale(sorvete_img, (tamCEL, tamCEL))
 
     #------ Funções internas ------#
