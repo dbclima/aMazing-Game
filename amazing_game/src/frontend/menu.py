@@ -107,6 +107,8 @@ def telaMenu(screen):
             if botaoJogar.handle_event(event):
                 try:
                     nivel_escolhido = dropdown.options[dropdown.selected_index]
+                    nivel_escolhido = int(nivel_escolhido[-1])
+                    print(nivel_escolhido)
                 except AttributeError:
                     nivel_escolhido = "NÍVEL 1"
                 return "jogar", nivel_escolhido

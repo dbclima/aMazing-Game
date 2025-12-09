@@ -16,7 +16,7 @@ def drawShadow(screen, rect, border_radius=40, offset=(5, 5), shadow_color=(0, 0
     screen.blit(sombra, dest.topleft)
 
 
-def telaLabirinto(screen, nivel, nome_jogador):
+def telaLabirinto(labirinto,screen):
 
     clock = pygame.time.Clock()
 
@@ -25,14 +25,7 @@ def telaLabirinto(screen, nivel, nome_jogador):
     timeDimensions = pygame.Rect(780, 70, 200, 50)
     fontSettings = pygame.font.SysFont("Bangers", 25, bold=True)
 
-    #------ Criação do labirinto com backend ------#
-    labirinto = criar_labirinto(
-        0,
-        3,
-        3,
-        maximo_checkpoints=8,
-        dificuldade=Dificuldade.DIFICIL,
-    )
+    #------ Criação do labirinto com backend ------
     dados = transforma_labirinto_para_json_front(labirinto)
 
     #------ Configurações do Labirinto ------#

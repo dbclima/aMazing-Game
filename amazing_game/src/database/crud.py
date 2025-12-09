@@ -33,9 +33,10 @@ def saveLab(L: Labirinto):
         json.dump(antigo, arquivo)
 
 def loadLab(id: int):
+    id_str = str(id)
     with open("fases.json", "r") as arquivo:
         antigo = json.load(arquivo)
-        labirinto = antigo[id]
+        labirinto = antigo[id_str]
     
     dimensoes = tuple(labirinto["dimensoes"])
     origem = tuple(labirinto["origem"])
@@ -45,7 +46,7 @@ def loadLab(id: int):
     for i in aux_check.keys():
         checkpoints[tuple(map(int, i.split(",")))] = aux_check[i]
     
-    if labirinto["dificuldade"] == 1:
+    if labirinto["dificuldade"] == 2 :
         dificuldade = Dificuldade.DIFICIL
     else:
         dificuldade = Dificuldade.FACIL
@@ -55,10 +56,20 @@ def loadLab(id: int):
     aux_arestas = labirinto["arestas"]
     for i, j in aux_arestas:
         arestas.append((tuple(i), tuple(j)))
-    
+
     grafo = nx.Graph()
     for i, j in arestas:
+        peso = 1
+        
         grafo.add_edge(i, j)
+        grafo.edges[(i, j)]["weight"] = peso
+
+    grafo = nx.DiGraph(grafo)
+
+    for i, j in arestas:
+        if j in checkpoints.keys():
+            grafo.edges[(i, j)]["weight"] = checkpoints[j]
+
     return Labirinto(id, grafo, dimensoes, origem, chegada, checkpoints, vida_inicial, dificuldade)
 
 def saveStats(id: int, username: str, score: int, time: float):
