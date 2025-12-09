@@ -93,6 +93,8 @@ def getStats(id: int):
     
     with open("leaderboard.json", "r") as arquivo:
         antigo = json.load(arquivo)
+        if id_str not in antigo.keys():
+            antigo[id_str] = {}
         leaderboard = antigo[id_str]
     
     leaderboard_ordenado = sorted(leaderboard.items(), key=lambda x: (-x[1]["score"], x[1]["time"]))

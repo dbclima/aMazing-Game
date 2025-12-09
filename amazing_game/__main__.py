@@ -18,7 +18,15 @@ while True:
 
         sucesso, XPfinal, tempoFinal = labirinto.telaLabirinto(lab,screen)
 
-        ranking.ranking()
+        print(type(tempoFinal))
+
+        if sucesso:
+            crud.saveStats(nivel, nomeJogador, XPfinal, tempoFinal)
+
+        rank = crud.getStats(nivel)
+        rank_lista = [(chave, valor["score"], str(valor["time"])) for chave, valor in rank]
+
+        ranking.ranking(rank_lista)
 
 
 #nomeJogador = telaNome.Nome(screen)

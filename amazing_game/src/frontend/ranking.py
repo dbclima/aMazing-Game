@@ -33,7 +33,7 @@ def draw_pill(surface, rect, text, font, hovered,
     surface.blit(txt, txt.get_rect(center=rect.center))
 
 
-def ranking():
+def ranking(ranking):
 # Configurações da tela
   WIDTH, HEIGHT = 1280, 720
   screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -50,13 +50,13 @@ def ranking():
   title_font = pygame.font.SysFont("Comic Sans MS", 32, bold=True)
 
   # Ranking (máx. 10)
-  ranking = [
-      ("Alice", 1200, "02:13"),
-      ("Bob", 1100, "02:50"),
-      ("Carol", 1050, "03:10"),
-      ("Daniel", 990, "03:40"),
-      ("Eve", 970, "03:55"),
-  ]
+#   ranking = [
+#       ("Alice", 1200, "02:13"),
+#       ("Bob", 1100, "02:50"),
+#       ("Carol", 1050, "03:10"),
+#       ("Daniel", 990, "03:40"),
+#       ("Eve", 970, "03:55"),
+#   ]
 
   # Botão Menu
   button_rect = pygame.Rect(WIDTH//2 - 200, HEIGHT - 90, 400, 70)
